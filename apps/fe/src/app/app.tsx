@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Todo } from '@apps/data';
-import { Todos } from '@apps/ui';
+import { Button, Input, Todos } from '@apps/ui';
+import styles from './app.module.scss';
+import type { Todo } from '@apps/data';
 
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [inputText, setInputText] = useState('');
 
   useEffect(() => {
     axios.get('/api/todos').then(({ data }) => {
@@ -13,8 +15,9 @@ const App = () => {
   }, []);
 
   function addTodo() {
-    axios.post('/api/todos').then(({ data }) => {
+    axios.post('/api/todos', { title: inputText }).then(({ data }) => {
       setTodos([...todos, data as Todo]);
+      setInputText('');
     });
   }
 
@@ -40,13 +43,19 @@ const App = () => {
   }
 
   return (
-    <>
+    <div className={styles['container']}>
       <h1>Todos</h1>
+      <div style={{ display: 'flex' }}>
+        <Input
+          value={inputText}
+          onChange={(event) => setInputText(event.target.value)}
+        />
+        <div className="fs-spacingDefault" />
+        <Button title="Add Todo" onClick={addTodo} />
+      </div>
+      <div className="fs-spacingDefault" />
       <Todos todos={todos} onItem={updateTodo} onRemoveItem={removeTodo} />
-      <button id={'add-todo'} onClick={addTodo}>
-        Add Todo
-      </button>
-    </>
+    </div>
   );
 };
 

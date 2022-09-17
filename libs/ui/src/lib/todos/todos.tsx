@@ -1,5 +1,7 @@
 import { Todo } from '@apps/data';
-import './todos.module.scss';
+import { Button } from '@apps/ui';
+import classNames from 'classnames';
+import styles from './todos.module.scss';
 
 export interface TodosProps {
   todos: Todo[];
@@ -8,16 +10,26 @@ export interface TodosProps {
 }
 
 export function Todos(props: TodosProps) {
-  console.log("🚀 ~ Todos ~ props", props)
   return (
-    <ul>
+    <>
       {props.todos.map((t) => (
-        <li key={t._id} className={'todo'}>
-          <span onClick={() => props.onItem(t)}>{t.title}</span>
-          <button onClick={() => props.onRemoveItem(t)}>X</button>
-        </li>
+        <div
+          key={t._id}
+          className={classNames(styles['fs-todo-item'], 'box-shadow')}
+        >
+          <span
+            className={classNames(
+              'un-selectable',
+              styles['fs-todo-item__title']
+            )}
+            onClick={() => props.onItem(t)}
+          >
+            {t.title}
+          </span>
+          <Button title="X" onClick={() => props.onRemoveItem(t)} />
+        </div>
       ))}
-    </ul>
+    </>
   );
 }
 

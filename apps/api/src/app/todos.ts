@@ -37,7 +37,7 @@ export function addTodoRoutes(app: Express) {
   // Add
   app.post('/api/todos', async (req, res) => {
     const todo = new TodoModel({
-      title: 'Added:: ' + new Date().toLocaleString(),
+      title: req.body.title,
       done: false,
     });
 

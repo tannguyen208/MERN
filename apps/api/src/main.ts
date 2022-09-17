@@ -1,5 +1,7 @@
 import * as express from 'express';
+import * as bodyParser from 'body-parser';
 import mongoose from 'mongoose';
+
 import { addTodoRoutes } from './app/todos';
 import { environment } from './environments/environment';
 
@@ -14,6 +16,14 @@ database.once('connected', () => {
 });
 
 const app = express();
+
+app.use(bodyParser.json()); // to support JSON-encoded bodies
+app.use(
+  bodyParser.urlencoded({
+    // to support URL-encoded bodies
+    extended: true,
+  })
+);
 
 app.get('/api', (req, res) => {
   res.send({ message: 'Welcome to api!' });
