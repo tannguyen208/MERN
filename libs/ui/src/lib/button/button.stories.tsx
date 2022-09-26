@@ -1,15 +1,15 @@
-import { Story, Meta } from '@storybook/react';
-import { Button, IButton } from './button';
+import {Story, Meta} from '@storybook/react'
+import {Button, IButton} from './button'
 
 export default {
   component: Button,
   title: 'Button',
-} as Meta;
+} as Meta
 
-const Template: Story<IButton> = (args) => <Button {...args} />;
+const Template: Story<IButton> = (args) => <Button {...args} />
 
-export const Primary = Template.bind({});
+export const Primary = Template.bind({})
 Primary.args = {
   title: 'X',
   onClick: console.log,
-};
+}

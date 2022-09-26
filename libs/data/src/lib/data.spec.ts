@@ -1,3 +1,3 @@
 describe('data', () => {
-  it('should work', () => {});
-});
+  it('should work', () => {})
+})

@@ -14,11 +14,23 @@
   list-style: none;
   border-radius: 4px;
 
+  cursor: pointer;
+
+  gap: 8px;
   display: flex;
   justify-content: space-between;
-}
 
-.fs-todo-item__title {
-  margin-right: 8px;
-  cursor: pointer;
+  &__title {
+    color: #000;
+  }
+  &__title\:done {
+    color: #8c8c8c;
+    text-decoration: line-through;
+  }
+
+  &__actions {
+    gap: 8px;
+    display: flex;
+    flex-direction: row;
+  }
 }

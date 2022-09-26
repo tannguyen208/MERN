@@ -1,12 +1,12 @@
-import { render } from '@testing-library/react';
+import {render} from '@testing-library/react'
 
-import Todos from './todos';
+import Todos from './todos'
 
 describe('Todos', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(
+    const {baseElement} = render(
       <Todos todos={[]} onItem={jest.fn} onRemoveItem={jest.fn} />
-    );
-    expect(baseElement).toBeTruthy();
-  });
-});
+    )
+    expect(baseElement).toBeTruthy()
+  })
+})

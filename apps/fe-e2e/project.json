@@ -18,18 +18,12 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "apps/fe-e2e/**/*.{js,ts}"
-        ]
+        "lintFilePatterns": ["apps/fe-e2e/**/*.{js,ts}"]
       }
     }
   },
   "tags": [],
-  "implicitDependencies": [
-    "fe"
-  ]
+  "implicitDependencies": ["fe"]
 }
