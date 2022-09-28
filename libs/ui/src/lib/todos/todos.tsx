@@ -1,13 +1,13 @@
-import {Todo} from '@apps/data'
+import {ITodo} from '@apps/data'
 import {Button} from '@apps/ui'
 import classNames from 'classnames'
 import styles from './todos.module.scss'
 
 export interface TodosProps {
-  todos: Todo[]
-  onItem?: (item: Todo) => void
-  onUpdateItem?: (item: Todo) => void
-  onRemoveItem?: (item: Todo) => void
+  todos: ITodo[]
+  onItem?: (item: ITodo) => void
+  onUpdateItem?: (item: ITodo) => void
+  onRemoveItem?: (item: ITodo) => void
 }
 
 export function Todos(props: TodosProps) {

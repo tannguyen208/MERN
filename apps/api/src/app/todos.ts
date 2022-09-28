@@ -1,81 +1,74 @@
-import {Express} from 'express'
-import mongoose from 'mongoose'
-
-import type {Todo} from '@apps/data'
-
-const todoSchema = new mongoose.Schema({
-  title: {
-    required: true,
-    type: String,
-  },
-  done: {
-    type: Boolean,
-  },
-})
-
-const TodoModel = mongoose.model('todo', todoSchema)
+import type {Express} from 'express'
+import * as CommonMiddleware from './middleware'
+import * as TodoServices from './services/todo.service'
+import {PaginationSchema} from '@apps/data'
 
 export function addTodoRoutes(app: Express) {
   // Get all
-  app.get('/api/todos', async (req, res) => {
+  app.get('/api/todos', CommonMiddleware.id, async (req, res) => {
     try {
-      const data = await TodoModel.find()
-      res.json(data)
-    } catch (error) {
-      res.status(500).json({message: error.message})
-    }
-  })
+      const {_id, limit, page} = req.query as Record<string, undefined>
+      if (_id) {
+        const todo = await TodoServices.act.getOne(_id as string)
+        res.status(200).json(todo)
+      }
 
-  // Get one
-  app.get('/api/todos/:id', async (req, res) => {
-    try {
-      const data = await TodoModel.findById(req.params.id)
-      res.json(data)
+      const todos = await TodoServices.act.getAll()
+      const pagination = new PaginationSchema({
+        limit,
+        page,
+      }).build(todos)
+
+      res.status(200).json(pagination)
     } catch (error) {
       res.status(500).json({message: error.message})
     }
   })
 
   // Add
-  app.post('/api/todos', async (req, res) => {
-    const todo = new TodoModel({
-      title: req.body.title,
-      done: false,
-    })
+  app.post(
+    '/api/todos',
+    TodoServices.middleware.title,
+    TodoServices.middleware.validation,
+    async (req, res) => {
+      try {
+        const doc = await TodoServices.act.insertOne({
+          title: req.body.title,
+        })
 
-    try {
-      const todoToSave = await todo.save()
-      res.status(200).json(todoToSave)
-    } catch (error) {
-      res.status(400).json({message: error.message})
+        res.status(200).json(doc)
+      } catch (error) {
+        res.status(400).json({message: error.message})
+      }
     }
-  })
+  )
 
   // Update
-  app.put('/api/todos/:id', async (req, res) => {
-    try {
-      const id = req.params.id
-      const options = {new: true}
+  app.put(
+    '/api/todos/',
+    CommonMiddleware.id,
+    TodoServices.middleware.id,
+    TodoServices.middleware.title,
+    TodoServices.middleware.done,
+    TodoServices.middleware.validation,
+    async (req, res): Promise<void> => {
+      try {
+        const _id = req.query._id as string
+        const result = await TodoServices.act.updateOne({...req.body, _id})
 
-      const requestBody: Partial<Todo> = req.body
-      if (!requestBody.title) {
-        res.status(400).json({message: 'Title is required'})
+        res.status(200).json(result)
+      } catch (error) {
+        res.status(400).json({message: error.message})
       }
-
-      const result = await TodoModel.findByIdAndUpdate(id, requestBody, options)
-
-      res.send(result)
-    } catch (error) {
-      res.status(400).json({message: error.message})
     }
-  })
+  )
 
   // Delete
-  app.delete('/api/todos/:id', async (req, res) => {
+  app.delete('/api/todos', CommonMiddleware.id, async (req, res) => {
     try {
-      const id = req.params.id
-      const data = await TodoModel.findByIdAndDelete(id)
-      res.send(`Document with ${data.id} has been deleted..`)
+      const _id = req.query._id as string
+      const data = await TodoServices.act.deleteOne(_id)
+      res.send(`Document with ${data._id} has been deleted..`)
     } catch (error) {
       res.status(400).json({message: error.message})
     }

@@ -1,22 +1,28 @@
 import http from './http'
-import type {Todo} from '@apps/data'
+import type {IPagination, ITodo} from '@apps/data'
+import {requestParams} from '@apps/data'
 
 const namespace = '/todos'
 
 export const TodoApi = {
-  getAll() {
-    return http.get(namespace)
+  getAll(params: Partial<IPagination<ITodo>>): Promise<IPagination<ITodo>> {
+    const url = requestParams(namespace, params)
+    return http.get(url)
   },
-  getOne(todoId: string) {
-    return http.get(namespace + '/' + todoId)
+  getOne(_id: string) {
+    const url = requestParams(namespace, {_id})
+    return http.get(url)
   },
-  addOne(todo: Partial<Todo>) {
-    return http.post(namespace, todo)
+  addOne(todo: Partial<ITodo>) {
+    const url = requestParams(namespace)
+    return http.post(url, todo)
   },
-  updateOne(todo: Partial<Todo>) {
-    return http.put(namespace + '/' + todo._id, todo)
+  updateOne(todo: Partial<ITodo>) {
+    const url = requestParams(namespace, {_id: todo._id})
+    return http.put(url, todo)
   },
-  deleteOne(todo: Partial<Todo>) {
-    return http.delete(namespace + '/' + todo._id)
+  deleteOne({_id}: Partial<ITodo>) {
+    const url = requestParams(namespace, {_id})
+    return http.delete(url)
   },
 }

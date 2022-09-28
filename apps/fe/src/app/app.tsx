@@ -1,59 +1,42 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useState, useCallback} from 'react'
 import {Button, Input, Todos} from '@apps/ui'
 import {TodoApi} from './apis/todo.api'
 import styles from './app.module.scss'
 
-import type {Todo} from '@apps/data'
+import type {ITodo} from '@apps/data'
 
 const App = () => {
-  const [todos, setTodos] = useState<Todo[]>([])
+  const [todos, setTodos] = useState<ITodo[]>([])
   const [inputText, setInputText] = useState('')
-  const [selected, setSelected] = useState<Todo>()
+  const [selected, setSelected] = useState<ITodo>()
+
+  const fetchTodos = async () => {
+    const response = await TodoApi.getAll({
+      page: 1,
+      limit: 10,
+    })
+    setTodos(response.data as unknown as ITodo[])
+  }
 
   useEffect(() => {
-    async function fetchTodos() {
-      const response = await TodoApi.getAll()
-      setTodos(response as unknown as Todo[])
-    }
-
     fetchTodos()
   }, [])
 
-  async function addTodo(todo: Partial<Todo>) {
-    // Need to use validation field here!
-    if (!todo.title) {
-      return
-    }
-
-    const response = await TodoApi.addOne(todo)
-
-    setTodos([...todos, response as unknown as Todo])
+  async function addTodo(todo: Partial<ITodo>): Promise<void> {
+    await TodoApi.addOne(todo)
+    fetchTodos()
     resetState()
   }
 
-  async function updateTodo(todo: Todo) {
-    // Need to use validation field here!
-    if (!Boolean(todo.title)) {
-      return
-    }
-
-    const response = (await TodoApi.updateOne(todo)) as unknown as Todo
-    const nextTodos = todos.map((t) => {
-      if (t._id === response._id) {
-        t.title = response.title
-        t.done = response.done
-      }
-
-      return t
-    })
-
-    setTodos(nextTodos)
+  async function updateTodo(todo: ITodo) {
+    await TodoApi.updateOne(todo)
+    fetchTodos()
     resetState()
   }
 
-  async function removeTodo(todo: Todo) {
+  async function removeTodo(todo: ITodo) {
     await TodoApi.deleteOne(todo)
-    setTodos(todos.filter((t) => t._id !== todo._id))
+    fetchTodos()
   }
 
   function resetState() {
