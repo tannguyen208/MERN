@@ -1,20 +1,18 @@
-import React from 'react'
-import classNames from 'classnames'
-import styles from './button.module.scss'
+import cn from 'classnames'
+import {
+  Button as AntButton, //
+  ButtonProps as AntButtonProps,
+} from 'antd'
 
-export type IButton = {
-  title: string
-} & React.DetailedHTMLProps<
-  React.ButtonHTMLAttributes<HTMLButtonElement>,
-  HTMLButtonElement
->
+// custom stylesheet
+import './button.scss'
+
+export type IButton = AntButtonProps & React.RefAttributes<HTMLElement>
 
 export function Button(props: IButton): JSX.Element {
-  return (
-    <button className={classNames(styles['fs-btn'], 'box-shadow')} {...props}>
-      {props.title}
-    </button>
-  )
+  const {className, ...rest} = props
+
+  return <AntButton className={cn('fs-btn', className)} {...rest} />
 }
 
 export default Button

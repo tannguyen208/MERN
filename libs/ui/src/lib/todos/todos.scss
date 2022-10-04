@@ -7,21 +7,29 @@
 */
 
 .fs-todo-item {
-  width: 400px;
+  width: 100%;
   padding: 8px 16px;
   margin-bottom: 8px;
   background: #fff;
   list-style: none;
   border-radius: 4px;
 
-  cursor: pointer;
-
   gap: 8px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
+
+  &\:selected {
+    outline: 1px solid #1890ff;
+  }
+
+  &__act {
+    cursor: pointer;
+  }
 
   &__title {
     color: #000;
+    margin-left: 8px;
   }
   &__title\:done {
     color: #8c8c8c;

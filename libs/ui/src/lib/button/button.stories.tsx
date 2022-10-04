@@ -10,6 +10,6 @@ const Template: Story<IButton> = (args) => <Button {...args} />
 
 export const Primary = Template.bind({})
 Primary.args = {
-  title: 'X',
+  children: 'X',
   onClick: console.log,
 }

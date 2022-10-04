@@ -38,6 +38,12 @@ const App = () => {
     refresh()
   }
 
+  function onUpdateItem() {
+    if (!selected) return
+
+    updateTodo({...selected, title: inputText})
+  }
+
   function refresh() {
     fetchTodos()
 
@@ -48,33 +54,41 @@ const App = () => {
 
   return (
     <div className={styles['container']}>
-      <h1>Todos</h1>
-      <div style={{display: 'flex'}}>
-        <Input value={inputText} onChange={(event) => setInputText(event.target.value)} />
+      <div style={{width: 320}}>
+        <h1>Todos</h1>
+        <div style={{display: 'flex'}}>
+          <Input value={inputText} size="small" onChange={(event) => setInputText(event.target.value)} />
+          {selected && (
+            <>
+              <div className="fs-spacingDefault" />
+              <Button size="small" onClick={onUpdateItem}>
+                Update
+              </Button>
+            </>
+          )}
+          <div className="fs-spacingDefault" />
+          <Button size="small" onClick={() => addTodo({title: inputText})}>
+            Add
+          </Button>
+        </div>
         {selected && (
           <>
             <div className="fs-spacingDefault" />
-            <Button
-              title="Update"
-              onClick={() => {
-                updateTodo({...selected, title: inputText})
-              }}
-            />
+            <div style={{whiteSpace: 'pre'}}>{JSON.stringify(selected, null, '\t')}</div>
           </>
         )}
         <div className="fs-spacingDefault" />
-        <Button title="Add" onClick={() => addTodo({title: inputText})} />
+        <Todos
+          todos={todos}
+          selected={selected}
+          onItem={(todo) => updateTodo({...todo, done: !todo.done})}
+          onUpdateItem={(todo) => {
+            setInputText(todo.title)
+            setSelected(todo)
+          }}
+          onRemoveItem={removeTodo}
+        />
       </div>
-      <div className="fs-spacingDefault" />
-      <Todos
-        todos={todos}
-        onItem={(todo) => updateTodo({...todo, done: !todo.done})}
-        onUpdateItem={(todo) => {
-          setInputText(todo.title)
-          setSelected(todo)
-        }}
-        onRemoveItem={removeTodo}
-      />
     </div>
   )
 }

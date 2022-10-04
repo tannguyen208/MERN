@@ -1,14 +1,16 @@
-import React from 'react'
-import classNames from 'classnames'
-import styles from './input.module.scss'
+import cn from 'classnames'
+import {
+  Input as AntInput, //
+  InputProps as AntInputProps,
+} from 'antd'
+import './input.scss'
 
-export type IInput = {} & React.DetailedHTMLProps<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  HTMLInputElement
->
+export type IInput = AntInputProps
 
 export function Input(props: IInput): JSX.Element {
-  return <input className={classNames(styles['fs-input'])} {...props} />
+  const {className, ...rest} = props
+
+  return <AntInput className={cn('fs-input', className)} {...rest} />
 }
 
 export default Input
