@@ -1,51 +1,30 @@
 import * as express from 'express'
-import * as bodyParser from 'body-parser'
-import * as cors from 'cors'
-import mongoose from 'mongoose'
+import bodyParsers from './app/configs/bodyParser'
+import cors from './app/configs/cors'
+import db from './app/configs/db'
+import routes from './app/routes'
 
-import {addTodoRoutes} from './app/todos'
-import {environment} from './environments/environment'
+// connect to the database
+db()
 
-mongoose.connect(environment.DB_CONNECTION)
-const database = mongoose.connection
-database.on('error', (error) => {
-  console.log(error)
-})
-
-database.once('connected', () => {
-  console.log('Database Connected')
-})
-
+// running application
 const app = express()
-
-// const whitelist = ['http://localhost:3000', 'http://localhost:3001'];
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   },
-// };
-// app.use(cors(corsOptions));
 app.use(cors())
-
-app.use(bodyParser.json()) // to support JSON-encoded bodies
-app.use(
-  bodyParser.urlencoded({
-    // to support URL-encoded bodies
-    extended: true,
-  })
-)
-
-app.get('/api', (req, res) => {
-  res.send({message: 'Welcome to api!'})
+bodyParsers().forEach((body) => {
+  app.use(body)
 })
-addTodoRoutes(app)
 
-const port = process.env.port || 3333
-const server = app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}/api`)
-})
-server.on('error', console.error)
+// add routes apis
+routes(app)
+
+const main = (port: number) => {
+  try {
+    app.listen(port, () => {
+      console.log(`Api running at: http://localhost:${port}`)
+    })
+  } catch (err) {
+    console.error(err)
+    process.exit()
+  }
+}
+main((process.env.port as unknown as number) || 3333)

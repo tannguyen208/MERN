@@ -3,7 +3,7 @@
   "singleQuote": true,
   "bracketSpacing": false,
   "endOfLine": "crlf",
-  "printWidth": 80,
+  "printWidth": 120,
   "semi": false,
   "overrides": [
     {

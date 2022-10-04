@@ -4,9 +4,7 @@
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {
-        "@typescript-eslint/no-empty-interface": ["off"]
-      }
+      "rules": {}
     },
     {
       "files": ["*.ts", "*.tsx"],

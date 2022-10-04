@@ -1,6 +1,6 @@
-import {useEffect, useState, useCallback} from 'react'
+import {useEffect, useState} from 'react'
 import {Button, Input, Todos} from '@apps/ui'
-import {TodoApi} from './apis/todo.api'
+import TodoService from './services/todo.service'
 import styles from './app.module.scss'
 
 import type {ITodo} from '@apps/data'
@@ -10,36 +10,38 @@ const App = () => {
   const [inputText, setInputText] = useState('')
   const [selected, setSelected] = useState<ITodo>()
 
-  const fetchTodos = async () => {
-    const response = await TodoApi.getAll({
-      page: 1,
-      limit: 10,
-    })
-    setTodos(response.data as unknown as ITodo[])
-  }
-
   useEffect(() => {
     fetchTodos()
   }, [])
 
-  async function addTodo(todo: Partial<ITodo>): Promise<void> {
-    await TodoApi.addOne(todo)
-    fetchTodos()
-    resetState()
+  async function fetchTodos() {
+    const response = await TodoService.getAll({
+      page: 1,
+      limit: 10,
+    })
+
+    setTodos((response?.payload?.data as unknown as ITodo[]) || [])
+  }
+
+  async function addTodo(todo: Partial<ITodo>) {
+    await TodoService.addOne(todo)
+    refresh()
   }
 
   async function updateTodo(todo: ITodo) {
-    await TodoApi.updateOne(todo)
-    fetchTodos()
-    resetState()
+    await TodoService.updateOne(todo)
+    refresh()
   }
 
   async function removeTodo(todo: ITodo) {
-    await TodoApi.deleteOne(todo)
-    fetchTodos()
+    await TodoService.deleteOne(todo._id)
+    refresh()
   }
 
-  function resetState() {
+  function refresh() {
+    fetchTodos()
+
+    // Reset state
     setInputText('')
     setSelected(undefined)
   }
@@ -48,10 +50,7 @@ const App = () => {
     <div className={styles['container']}>
       <h1>Todos</h1>
       <div style={{display: 'flex'}}>
-        <Input
-          value={inputText}
-          onChange={(event) => setInputText(event.target.value)}
-        />
+        <Input value={inputText} onChange={(event) => setInputText(event.target.value)} />
         {selected && (
           <>
             <div className="fs-spacingDefault" />

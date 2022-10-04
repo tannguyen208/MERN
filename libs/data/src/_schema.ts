@@ -1,8 +1,12 @@
-export class Schema<T> {
+import {Serializable} from './_serialization'
+
+export class Schema<T> extends Serializable {
   _namespace!: string
   _value!: Partial<T>
 
   constructor(schemaValue: Partial<T>, classNamespace?: string) {
+    super()
+
     this._value = schemaValue
     this._namespace = classNamespace || 'Schema<T>'
   }

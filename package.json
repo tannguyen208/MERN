@@ -6,11 +6,6 @@
     "start": "npx nx run-many --target=serve",
     "build": "npx nx run-many --target=build",
     "test": "npx nx run-many --target=test",
-    "start:fe": "nx run fe:serve:development",
-    "build:fe": "nx run fe:build:production",
-    "test:fe": "nx run fe:test",
-    "start:api": "nx serve api",
-    "build:api": "nx build api",
     "prepare": "husky install"
   },
   "private": true,
@@ -21,14 +16,17 @@
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
     "express": "^4.18.1",
-    "express-validator": "^6.14.2",
+    "http-status-codes": "^2.2.0",
     "lodash": "^4.17.21",
     "mongoose": "^6.6.1",
+    "multer": "^1.4.5-lts.1",
     "query-string": "^7.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.13.7",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "7.12.13",

@@ -6,6 +6,7 @@
     "data": "libs/data",
     "fe": "apps/fe",
     "fe-e2e": "apps/fe-e2e",
-    "ui": "libs/ui"
+    "ui": "libs/ui",
+    "utils": "libs/utils"
   }
 }

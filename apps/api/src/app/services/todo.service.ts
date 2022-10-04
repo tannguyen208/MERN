@@ -1,9 +1,9 @@
-import type {ITodo} from '@apps/data'
 import type {Request, Response, NextFunction} from 'express'
-import {checkSchema, validationResult, body} from 'express-validator'
+import {ITodo, TodoSchema} from '@apps/data'
+import {ResponseUtils} from '@apps/utils'
 import mongoose from 'mongoose'
 
-const todoSchema = new mongoose.Schema({
+const schema = new mongoose.Schema({
   title: {
     required: true,
     type: String,
@@ -13,24 +13,26 @@ const todoSchema = new mongoose.Schema({
   },
 })
 
-const TodoModel = mongoose.model('todo', todoSchema)
+const TodoModel = mongoose.model('todo', schema)
 
 export const middleware = {
-  id: checkSchema({
-    _id: {
-      in: ['params', 'query'],
-      errorMessage: '_id is required!',
-      isString: true,
-    },
-  }),
-  title: body('title').isString().notEmpty(),
-  done: body('done').isBoolean(),
-  validation: (req: Request, res: Response, next: NextFunction): void => {
+  validation: async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      validationResult(req).throw()
+      await TodoSchema.validation().validate({
+        title: req.body.title,
+        done: req.body.done,
+      })
+
       next()
-    } catch (errors) {
-      res.status(400).json(errors)
+    } catch (error) {
+      res
+        .status(ResponseUtils.StatusCodes.BAD_REQUEST) //
+        .json(
+          ResponseUtils.failure({
+            error,
+            message: error.message || ResponseUtils.ReasonPhrases.BAD_REQUEST,
+          })
+        )
     }
   },
 }

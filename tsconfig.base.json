@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
-    "sourceMap": true,
+    "sourceMap": false,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@apps/data": ["libs/data/src/index.ts"],
-      "@apps/ui": ["libs/ui/src/index.ts"]
+      "@apps/ui": ["libs/ui/src/index.ts"],
+      "@apps/utils": ["libs/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

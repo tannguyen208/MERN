@@ -36,10 +36,10 @@ export class PaginationSchema<T> extends Schema<IPagination<T>> {
     this.setCanNext(pageIndex + 1 < totalPages)
     this.setData(chunked[pageIndex])
 
-    return this.toJson()
+    return this
   }
 
-  toJson() {
+  toJson(): IPagination<T> {
     return {
       limit: this.limit,
       page: this.page,
