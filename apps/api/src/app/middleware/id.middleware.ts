@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express'
 import {isNull} from 'lodash'
-import {ResponseUtils} from '@apps/utils'
+import {ResponseUtils} from '@_/utils/lib/api.util'
 import {errorMessages} from '../constants/errorMessages'
 
 export const id = (req: Request, res: Response, next: NextFunction): void => {

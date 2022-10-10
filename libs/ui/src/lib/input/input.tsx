@@ -1,3 +1,4 @@
+import {forwardRef} from 'react'
 import cn from 'classnames'
 import {
   Input as AntInput, //
@@ -5,12 +6,12 @@ import {
 } from 'antd'
 import './input.scss'
 
-export type IInput = AntInputProps
+export type IInput = AntInputProps & {[key: string]: unknown}
 
-export function Input(props: IInput): JSX.Element {
+export const Input = forwardRef((props: IInput, ref?: any): JSX.Element => {
   const {className, ...rest} = props
 
-  return <AntInput className={cn('fs-input', className)} {...rest} />
-}
+  return <AntInput className={cn('fs-input', className)} ref={ref} {...rest} />
+})
 
 export default Input

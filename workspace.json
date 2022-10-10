@@ -3,7 +3,7 @@
   "version": 2,
   "projects": {
     "api": "apps/api",
-    "data": "libs/data",
+    "models": "libs/models",
     "fe": "apps/fe",
     "fe-e2e": "apps/fe-e2e",
     "ui": "libs/ui",

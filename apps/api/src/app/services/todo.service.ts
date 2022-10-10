@@ -1,26 +1,15 @@
-import type {Request, Response, NextFunction} from 'express'
-import {ITodo, TodoSchema} from '@apps/data'
-import {ResponseUtils} from '@apps/utils'
-import mongoose from 'mongoose'
-
-const schema = new mongoose.Schema({
-  title: {
-    required: true,
-    type: String,
-  },
-  done: {
-    type: Boolean,
-  },
-})
-
-const TodoModel = mongoose.model('todo', schema)
+import {mapper} from '@_/models/_mapper'
+import type {NextFunction, Request, Response} from 'express'
+import {ResponseUtils} from '@_/utils/lib/api.util'
+import {Todo, TodoDto, TodoSchema} from '@_/models/lib/todo'
+import TodoRepository from '../data/repositories/todo.repository'
 
 export const middleware = {
   validation: async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       await TodoSchema.validation().validate({
-        title: req.body.title,
         done: req.body.done,
+        title: req.body.title,
       })
 
       next()
@@ -38,28 +27,27 @@ export const middleware = {
 }
 
 export const act = {
-  getOne: (_id: string) => {
-    return TodoModel.findById(_id)
+  deleteOne(_id: string) {
+    return TodoRepository.instance.deleteOne(_id)
   },
 
-  getAll: () => {
-    return TodoModel.find()
+  async getAll() {
+    const todos = (await TodoRepository.instance.getAll()) as unknown as Todo[]
+    return mapper.mapArray(todos, Todo, TodoDto)
   },
 
-  insertOne: (todo: Pick<ITodo, 'title'>) => {
-    const doc = new TodoModel({
-      title: todo.title,
+  getOne(_id: string) {
+    return TodoRepository.instance.getOne(_id)
+  },
+
+  insertOne(todo: Partial<Todo>) {
+    return TodoRepository.instance.insertOne({
       done: false,
-    })
-
-    return doc.save()
+      ...todo,
+    } as Todo)
   },
 
-  updateOne: (todo: Partial<ITodo>) => {
-    return TodoModel.findByIdAndUpdate(todo._id, todo)
-  },
-
-  deleteOne: (_id: string) => {
-    return TodoModel.findByIdAndDelete(_id)
+  updateOne(todo: Partial<Todo>) {
+    return TodoRepository.instance.updateOne(todo._id, todo)
   },
 }

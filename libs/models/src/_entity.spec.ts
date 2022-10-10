@@ -1,4 +1,4 @@
-describe('@libs/utils/api.util', () => {
+describe('@libs/models/_entity', () => {
   it('should work', () => {
     //
   })

@@ -1,4 +1,4 @@
-import {IResponse} from '@apps/data'
+import {Response} from '@_/models/lib/api'
 import * as HttpStatusCodes from 'http-status-codes'
 
 export const RequestUtils = {
@@ -7,6 +7,6 @@ export const RequestUtils = {
 
 export const ResponseUtils = {
   ...HttpStatusCodes,
-  success: (response: Partial<IResponse>) => ({success: true, ...response}),
-  failure: (response: Partial<IResponse>) => ({success: false, ...response}),
+  failure: (response: Partial<Response>) => ({success: false, ...response}),
+  success: (response: Partial<Response>) => ({success: true, ...response}),
 }

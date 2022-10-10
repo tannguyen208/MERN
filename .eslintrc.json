@@ -38,5 +38,9 @@
       },
       "rules": {}
     }
-  ]
+  ],
+  "rules": {
+    "sort-vars": ["error", {"ignoreCase": true}],
+    "sort-keys": ["error", "asc", {"caseSensitive": true, "natural": false, "minKeys": 2}]
+  }
 }

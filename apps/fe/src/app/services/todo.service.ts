@@ -1,8 +1,10 @@
-import type {IPagination, ITodo} from '@apps/data'
+import {Pagination} from '@_/models/_pagination'
+import {Todo} from '@_/models/lib/todo'
+
 import TodoApiImpl from '../apis/todo.api'
 
 class TodoService {
-  getAll(params: Partial<IPagination<ITodo>>) {
+  getAll(params: Partial<Pagination<Todo>>) {
     return TodoApiImpl.getAll(params)
   }
 
@@ -10,11 +12,11 @@ class TodoService {
     return TodoApiImpl.getOne(_id)
   }
 
-  addOne(todo: Partial<ITodo>) {
+  addOne(todo: Partial<Todo>) {
     return TodoApiImpl.addOne(todo)
   }
 
-  updateOne(todo: Partial<ITodo>) {
+  updateOne(todo: Partial<Todo>) {
     return TodoApiImpl.updateOne(todo)
   }
 

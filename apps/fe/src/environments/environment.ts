@@ -2,6 +2,6 @@
 // When building for production, this file is replaced with `environment.prod.ts`.
 
 export const environment = {
-  production: false,
   apiURL: 'http://localhost:3333/api',
+  production: false,
 }

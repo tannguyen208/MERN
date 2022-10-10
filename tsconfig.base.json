@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
+    "noEmit": true,
     "sourceMap": false,
     "declaration": false,
     "moduleResolution": "node",
@@ -15,9 +16,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@apps/data": ["libs/data/src/index.ts"],
-      "@apps/ui": ["libs/ui/src/index.ts"],
-      "@apps/utils": ["libs/utils/src/index.ts"]
+      "@_/models/*": ["libs/models/src/*"],
+      "@_/ui": ["libs/ui/src/index.ts"],
+      "@_/ui/*": ["libs/ui/src/*"],
+      "@_/utils": ["libs/utils/src"],
+      "@_/utils/*": ["libs/utils/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

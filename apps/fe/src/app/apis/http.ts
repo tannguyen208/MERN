@@ -1,6 +1,6 @@
 import axios from 'axios'
-import Qs from 'query-string'
 import {environment} from '../../environments/environment'
+import * as Qs from 'query-string'
 
 const http = axios.create({
   baseURL: environment.apiURL,

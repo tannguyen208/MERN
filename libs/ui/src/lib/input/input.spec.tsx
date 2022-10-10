@@ -1,4 +1,4 @@
-describe('@libs/utils/api.util', () => {
+describe('@libs/ui/input', () => {
   it('should work', () => {
     //
   })

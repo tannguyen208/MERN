@@ -1,15 +1,15 @@
-import {ITodo} from '@apps/data'
-import {Button, MinusCircleOutlined, CheckCircleTwoTone} from '@apps/ui'
+import {Todo} from '@_/models/lib/todo'
+import {Button, MinusCircleOutlined, CheckCircleTwoTone} from '@_/ui'
 import cn from 'classnames'
 import {} from '../icons/icons'
 import './todos.scss'
 
 export interface TodosProps {
-  todos: ITodo[]
-  selected?: ITodo
-  onItem?: (item: ITodo) => void
-  onUpdateItem?: (item: ITodo) => void
-  onRemoveItem?: (item: ITodo) => void
+  todos: Todo[]
+  selected?: Todo
+  onItem?: (item: Todo) => void
+  onUpdateItem?: (item: Todo) => void
+  onRemoveItem?: (item: Todo) => void
 }
 
 export function Todos(props: TodosProps) {

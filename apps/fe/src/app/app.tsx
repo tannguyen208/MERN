@@ -1,50 +1,64 @@
-import {useEffect, useState} from 'react'
-import {Button, Input, Todos} from '@apps/ui'
+import {useRef, useEffect, useState} from 'react'
+import {Button, Input, Todos} from '@_/ui'
 import TodoService from './services/todo.service'
+import UserService from './services/user.service'
 import styles from './app.module.scss'
 
-import type {ITodo} from '@apps/data'
+import {Todo} from '@_/models/lib/todo'
+import {UserDto} from '@_/models/lib/user'
 
 const App = () => {
-  const [todos, setTodos] = useState<ITodo[]>([])
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [todos, setTodos] = useState<Todo[]>([])
   const [inputText, setInputText] = useState('')
-  const [selected, setSelected] = useState<ITodo>()
+  const [user, setUser] = useState<UserDto>()
+  const [selected, setSelected] = useState<Todo>()
 
   useEffect(() => {
+    fetchUser()
     fetchTodos()
   }, [])
 
-  async function fetchTodos() {
+  const fetchTodos = async () => {
     const response = await TodoService.getAll({
-      page: 1,
       limit: 10,
+      page: 1,
     })
 
-    setTodos((response?.payload?.data as unknown as ITodo[]) || [])
+    setTodos((response?.payload?.data as unknown as Todo[]) || [])
   }
 
-  async function addTodo(todo: Partial<ITodo>) {
+  const fetchUser = async () => {
+    const response = await UserService.getUserByUsername('tanna@gmail.com')
+    setUser(response.payload)
+  }
+
+  const addTodo = async (todo: Partial<Todo>) => {
     await TodoService.addOne(todo)
     refresh()
   }
 
-  async function updateTodo(todo: ITodo) {
+  const updateTodo = async (todo: Todo) => {
     await TodoService.updateOne(todo)
     refresh()
   }
 
-  async function removeTodo(todo: ITodo) {
+  const removeTodo = async (todo: Todo) => {
     await TodoService.deleteOne(todo._id)
     refresh()
   }
 
-  function onUpdateItem() {
+  const onAdd = () => {
+    addTodo({title: inputText})
+  }
+
+  const onUpdateItem = () => {
     if (!selected) return
 
     updateTodo({...selected, title: inputText})
   }
 
-  function refresh() {
+  const refresh = () => {
     fetchTodos()
 
     // Reset state
@@ -56,8 +70,15 @@ const App = () => {
     <div className={styles['container']}>
       <div style={{width: 320}}>
         <h1>Todos</h1>
+        <div style={{whiteSpace: 'pre'}}>{JSON.stringify(user, null, '\t')}</div>
         <div style={{display: 'flex'}}>
-          <Input value={inputText} size="small" onChange={(event) => setInputText(event.target.value)} />
+          <Input
+            ref={inputRef}
+            value={inputText}
+            size="small"
+            onChange={(event: React.FormEvent<HTMLInputElement>) => setInputText(event.currentTarget.value)}
+            onPressEnter={onAdd}
+          />
           {selected && (
             <>
               <div className="fs-spacingDefault" />
@@ -67,7 +88,7 @@ const App = () => {
             </>
           )}
           <div className="fs-spacingDefault" />
-          <Button size="small" onClick={() => addTodo({title: inputText})}>
+          <Button size="small" onClick={onAdd}>
             Add
           </Button>
         </div>
@@ -85,6 +106,9 @@ const App = () => {
           onUpdateItem={(todo) => {
             setInputText(todo.title)
             setSelected(todo)
+
+            // focus the input field
+            inputRef.current?.focus()
           }}
           onRemoveItem={removeTodo}
         />

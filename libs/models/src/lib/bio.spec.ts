@@ -1,4 +1,4 @@
-describe('@libs/utils/api.util', () => {
+describe('@libs/models/bio', () => {
   it('should work', () => {
     //
   })

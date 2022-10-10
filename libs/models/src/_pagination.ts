@@ -1,21 +1,21 @@
-import {chunk} from 'lodash'
 import {Schema} from './_schema'
+import {chunk} from 'lodash'
 
-export interface IPagination<T> {
-  page: number
-  limit: number
-  totalPages: number
-  count: number
-  canPrev: boolean
-  canNext: boolean
-  data: T[]
+export class Pagination<T> {
+  page!: number
+  limit!: number
+  totalPages!: number
+  count!: number
+  canPrev!: boolean
+  canNext!: boolean
+  data!: T[]
 }
 
 export const PAGE_DEFAULT = 1
 export const LIMIT_DEFAULT = 10
 
-export class PaginationSchema<T> extends Schema<IPagination<T>> {
-  constructor(schema: Pick<IPagination<T>, 'limit' | 'page'>) {
+export class PaginationSchema<T> extends Schema<Pagination<T>> {
+  constructor(schema: Pick<Pagination<T>, 'limit' | 'page'>) {
     super(schema, '@pagination')
 
     schema.page = schema.page || PAGE_DEFAULT
@@ -39,15 +39,15 @@ export class PaginationSchema<T> extends Schema<IPagination<T>> {
     return this
   }
 
-  toJson(): IPagination<T> {
+  toJson(): Pagination<T> {
     return {
+      canNext: this.canNext,
+      canPrev: this.canPrev,
+      count: this.count,
+      data: this.data,
       limit: this.limit,
       page: this.page,
       totalPages: this.totalPages,
-      count: this.count,
-      canPrev: this.canPrev,
-      canNext: this.canNext,
-      data: this.data,
     }
   }
 

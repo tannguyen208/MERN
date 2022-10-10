@@ -1,5 +1,5 @@
 import {Story, Meta} from '@storybook/react'
-import type {Todo} from '@apps/data'
+import {Todo} from '@_/models/lib/todo'
 import {Todos, TodosProps} from './todos'
 
 export default {
@@ -11,7 +11,7 @@ const Template: Story<TodosProps> = (args) => <Todos {...args} />
 
 export const Primary = Template.bind({})
 Primary.args = {
-  todos: [{_id: 'drink-coffee', title: 'Drink coffee', done: false}] as Todo[],
   onItem: console.log,
   onRemoveItem: console.log,
+  todos: [{_id: 'drink-coffee', done: false, title: 'Drink coffee'}] as Todo[],
 }
